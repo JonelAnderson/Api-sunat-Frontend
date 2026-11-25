@@ -1,0 +1,131 @@
+<div class="relative overflow-hidden w-full">
+
+    <ngx-spinner bdColor="rgba(51,51,51,0.8)" name="show-table" size="medium" color="#fff" type="ball-scale-multiple"
+        [fullScreen]="false">
+    </ngx-spinner>
+
+    <div class="p-0 overflow-hidden">
+        <div class="table-responsive" [class.overflow-auto]="dataSource.filteredData.length"
+            #foregroundSpinner>
+            <table [dataSource]="dataSource" class="w-full text-sm text-center" mat-table>
+                <ng-container *ngFor="let column of columns">
+
+                    <ng-container *ngIf="column.type === 'text'" [matColumnDef]="column.property" [sticky]="column.sticky">
+
+                        <th mat-header-cell *matHeaderCellDef [ngClass]="column.cssLabel">
+                            {{ column.label }}
+                        </th>
+
+                        <td mat-cell *matCellDef="let row" [ngClass]="column.cssProperty">
+                            {{ row[column.property] }}
+
+                        </td>
+
+                    </ng-container>
+
+                    <ng-container *ngIf="column.type === 'number'" [matColumnDef]="column.property">
+
+                        <th mat-header-cell *matHeaderCellDef [ngClass]="column.cssLabel">
+                            {{ column.label }}
+                        </th>
+
+                        <td mat-cell *matCellDef="let row" [ngClass]="column.cssProperty">
+                            {{ row[column.property] }}
+                        </td>
+
+                    </ng-container>
+
+                    <ng-container *ngIf="column.type === 'imagen'" [matColumnDef]="column.property"
+                        [sticky]="column.sticky">
+                        <th mat-header-cell *matHeaderCellDef [ngClass]="column.cssLabel">
+                            {{ column.label }}
+                        </th>
+
+                        <td mat-cell *matCellDef="let row">
+                            <img [src]="row[column.property]" class="avatar h-9 w-9 align-middle my-2" />
+                        </td>
+                    </ng-container>
+
+
+                    <ng-container *ngIf="column.type === 'datetime'" [matColumnDef]="column.property">
+
+                        <th mat-header-cell *matHeaderCellDef [ngClass]="column.cssLabel">
+                            {{ column.label }}
+                        </th>
+
+                        <td mat-cell *matCellDef="let row" [ngClass]="column.cssProperty">
+
+                            {{ row[column.property] | date:'dd/MM/yyyy hh:mm:ss a' }}
+                        </td>
+
+                    </ng-container>
+
+                    <ng-container *ngIf="column.type === 'date'" [matColumnDef]="column.property">
+
+                        <th mat-header-cell *matHeaderCellDef [ngClass]="column.cssLabel">
+                            {{ column.label }}
+                        </th>
+
+                        <td mat-cell *matCellDef="let row" [ngClass]="column.cssProperty">
+                            {{ row[column.property] | date:'dd/MM/yyyy' }}
+                        </td>
+
+                    </ng-container>
+
+                    <ng-container *ngIf="column.type === 'badge'" [matColumnDef]="column.property" [sticky]="column.sticky">
+
+                        <th mat-header-cell *matHeaderCellDef [ngClass]="column.cssLabel">
+                            {{ column.label }}
+                        </th>
+
+                        <td mat-cell *matCellDef="let row" [ngClass]="column.cssProperty">
+
+                            <ng-container>
+                                <span class="badge" [ngClass]="row['badgeColor']">{{ row[column.property] | uppercase
+                                    }}</span>
+                            </ng-container>
+
+                        </td>
+
+                    </ng-container>
+
+                    <ng-container *ngIf="column.type === 'actions'" [matColumnDef]="column.property"
+                        [sticky]="column.sticky">
+                        <th mat-header-cell *matHeaderCellDef [ngClass]="column.cssLabel">
+                            {{ column.label }}
+                        </th>
+
+                        <td mat-cell *matCellDef="let row" [ngClass]="column.cssProperty">
+                            <!-- Botones de acciones -->
+                            <div class="text-center bg-white rounded-sm overflow-hidden">
+                                <button mat-icon-button [matMenuTriggerFor]="menu" class="font-bold text-am-main-blue"
+                                    matTooltip="Acciones">
+                                    <mat-icon fontIcon="more_vert"></mat-icon>
+                                </button>
+                                <mat-menu #menu="matMenu" class="shadow-2xl">
+                                    <ng-container *ngFor="let action of actions">
+                                        <button mat-menu-item *ngIf="isActionVisible(action, row)"
+                                            [disabled]="isActionDisabled(action, row)"
+                                            [matTooltip]="getActionTooltip(action, row)"
+                                            (click)="handleAction(action.id, row)">
+                                            <mat-icon [color]="getActionColor(action, row)"
+                                                [fontIcon]="getActionIcon(action, row)"></mat-icon>
+                                            {{getActionLabel(action, row)}}
+                                        </button>
+                                    </ng-container>
+                                </mat-menu>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="visibleColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; let i = index; columns : visibleColumns;"></tr>
+            </table>
+            <div *ngIf="dataSource.filteredData.length === 0" class="d-flex flex-column justify-center items-center py-5">
+                <h5 class="headline m-0 text-center text-muted">No hay resultados en esta búsqueda</h5>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+<!-- Mostrar archivo existente si hay uno y no se ha seleccionado un nuevo archivo -->
+@if (currentUrlPdf && !hasNewFile) {
+<div [class]="containerClass" class="file-container"
+    style="border: 2px dashed #ccc; border-radius: 5px; position: relative;">
+    <div class="overlay">
+        <span class="delete-button" (click)="clearExisting()">
+            <em [class]="deleteIcon"></em>
+        </span>
+        <div class="text-center p-4">
+            <div class="icon m-b-2 text-danger">
+                <mat-icon fontIcon="picture_as_pdf" class="text-danger"
+                    style="font-size: 3rem; width: 3rem; height: 3rem;"></mat-icon>
+            </div>
+            <div class="file-name mt-2 fw-bold">{{ getFileName(currentUrlPdf) }}</div>
+            <div class="text-muted small">Documento PDF cargado</div>
+        </div>
+    </div>
+</div>
+}
+
+<!-- Mostrar el selector de archivos si no hay archivo existente o si se ha descartado -->
+@if (!currentUrlPdf || hasNewFile) {
+<file-upload [control]="control" [class]="containerClass">
+    <ng-template let-isFileDragDropAvailable="isFileDragDropAvailable" #placeholder>
+        @if (control.size === 0) {
+        <div class="d-flex align-items-center">
+            <div class="icon m-e-2 text-primary m-r-5">
+                <em [class]="uploadIcon" style="font-size: 18px;"></em>
+            </div>
+            <div class="upload-text text-center">
+                @if (isFileDragDropAvailable) {
+                <div class="fw-bold">{{ dragDropText }}</div>
+                } @else {
+                <div class="fw-bold">{{ clickText }}</div>
+                }
+                <div class="small text-muted mt-1">Solo archivos PDF (Max: {{ getReadableFileSize(maxSize) }})</div>
+            </div>
+        </div>
+        }
+    </ng-template>
+    <ng-template let-i="index" let-file="file" let-control="control" #item>
+        <div class="overlay w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
+            <span class="delete-button" (click)="control.removeFile(file)">
+                <em [class]="deleteIcon"></em>
+            </span>
+            @if (control.valid) {
+            <div class="icon m-b-2 text-danger">
+                <mat-icon fontIcon="picture_as_pdf" class="text-danger"
+                    style="font-size: 3rem; width: 3rem; height: 3rem;"></mat-icon>
+            </div>
+            <div class="file-name m-t-2 fw-bold text-center text-truncate w-100" [title]="file.name">{{ file.name }}
+            </div>
+            <div class="file-size m-t-1 text-muted small">{{ getReadableFileSize(file.size) }}</div>
+            }
+        </div>
+    </ng-template>
+</file-upload>
+}

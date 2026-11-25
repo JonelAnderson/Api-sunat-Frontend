@@ -1,0 +1,5 @@
+# Panel API SUNAT: solo si se publica en Netlify (lo recomendado es nginx detrás de VPN / lista de IP).
+# Para reenviar la API: reemplazar <API-SUNAT> por el dominio de la API SUNAT (nunca el del ERP ni el de la consola de
+# plataforma) y quitar el "#" de la línea. La API debe tener ese origen en ADMIN_ALLOWED_ORIGINS.
+# /api/*        https://<API-SUNAT>/api/:splat        200
+/*              /index.html                           200

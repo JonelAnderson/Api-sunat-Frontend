@@ -1,0 +1,20 @@
+<div class="erp-date-range" [class.erp-date-range--active]="hasValue()" matTooltip="Filtrar por rango de fechas"
+  matTooltipPosition="above">
+  <em class="feather icon-calendar erp-date-range__icon" aria-hidden="true"></em>
+  <mat-date-range-input class="erp-date-range__input" [formGroup]="range" [rangePicker]="picker" [max]="maxDate"
+    (click)="picker.open()">
+    <input matStartDate readonly formControlName="startDate" [placeholder]="placeholderStart" [attr.aria-label]="placeholderStart"
+      (dateChange)="onDateChange()">
+    <input matEndDate readonly formControlName="endDate" [placeholder]="placeholderEnd" [attr.aria-label]="placeholderEnd"
+      (dateChange)="onDateChange()">
+  </mat-date-range-input>
+  @if (clearable && hasValue()) {
+  <button type="button" class="erp-date-range__clear" (click)="clear($event)" aria-label="Quitar el rango de fechas">
+    <em class="feather icon-x"></em>
+  </button>
+  }
+  <mat-datepicker-toggle class="erp-date-range__toggle" [for]="picker" aria-label="Abrir calendario">
+    <em matDatepickerToggleIcon class="feather icon-chevron-down"></em>
+  </mat-datepicker-toggle>
+  <mat-date-range-picker #picker></mat-date-range-picker>
+</div>

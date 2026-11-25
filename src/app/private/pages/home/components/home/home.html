@@ -1,0 +1,180 @@
+<div class="row btn-page">
+  <div class="col-sm-12">
+    @if (canSeeDashboard) {
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+          <div>
+            <h4 class="mb-1">Panel API SUNAT</h4>
+            <p class="text-muted mb-0">Estado de todas las empresas emisoras y de la operación del mes.</p>
+          </div>
+          <button type="button" class="btn btn-outline-primary btn-sm" [disabled]="loading()" (click)="load()">
+            @if (loading()) {<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>}
+            @else {<em class="feather icon-refresh-cw me-1"></em>}
+            Actualizar
+          </button>
+        </div>
+        @if (error()) {
+        <div class="alert alert-warning">{{ error() }}</div>
+        }
+        <div class="row g-3">
+          @for (c of cards(); track c.label) {
+          <div class="col-sm-6 col-xl-3">
+            @if (c.url) {
+            <a class="card h-100 text-decoration-none border shadow-none mb-0 home-card" [routerLink]="c.url" [queryParams]="c.queryParams ?? {}">
+              <ng-container *ngTemplateOutlet="cardBody; context: { $implicit: c }"></ng-container>
+            </a>
+            } @else {
+            <div class="card h-100 border shadow-none mb-0">
+              <ng-container *ngTemplateOutlet="cardBody; context: { $implicit: c }"></ng-container>
+            </div>
+            }
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    @if (metrics(); as m) {
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+          <div>
+            <h5 class="mb-1">Métricas globales</h5>
+            <p class="text-muted small mb-0">
+              {{ m.period }}@if (m.metricsAt) {<span> · calculadas {{ m.metricsAt }} (se actualizan cada minuto)</span>}.
+              Las ventas suman facturas y boletas aceptadas en soles.
+            </p>
+          </div>
+        </div>
+        <div class="row g-3 mb-4">
+          @for (c of m.cards; track c.label) {
+          <div class="col-sm-6 col-xl-3">
+            @if (c.url) {
+            <a class="card h-100 text-decoration-none border shadow-none mb-0 home-card" [routerLink]="c.url" [queryParams]="c.queryParams ?? {}">
+              <ng-container *ngTemplateOutlet="cardBody; context: { $implicit: c }"></ng-container>
+            </a>
+            } @else {
+            <div class="card h-100 border shadow-none mb-0">
+              <ng-container *ngTemplateOutlet="cardBody; context: { $implicit: c }"></ng-container>
+            </div>
+            }
+          </div>
+          }
+        </div>
+
+        @if (m.days.length) {
+        <h6 class="mb-2"><em class="feather icon-bar-chart-2 me-1 text-primary"></em>Comprobantes de los últimos 30 días</h6>
+        <div class="home-legend small text-muted mb-2">
+          <span><i class="home-legend__dot home-bar--f"></i>Facturas</span>
+          <span><i class="home-legend__dot home-bar--b"></i>Boletas</span>
+          <span><i class="home-legend__dot home-bar--n"></i>Notas</span>
+        </div>
+        <div class="home-chart mb-4" role="img" aria-label="Comprobantes por día de los últimos 30 días">
+          @for (d of m.days; track d.date) {
+          <div class="home-chart__col" [title]="d.title">
+            <div class="home-chart__stack">
+              <div class="home-bar--n" [style.height.%]="d.notas"></div>
+              <div class="home-bar--b" [style.height.%]="d.boletas"></div>
+              <div class="home-bar--f" [style.height.%]="d.facturas"></div>
+            </div>
+            <span class="home-chart__label">{{ d.showLabel ? d.label : '' }}</span>
+          </div>
+          }
+        </div>
+        }
+
+        <div class="row g-4">
+          <div class="col-lg-6"><app-view-block [block]="m.byType"></app-view-block></div>
+          <div class="col-lg-6"><app-view-block [block]="m.status"></app-view-block></div>
+          <div class="col-12"><div class="home-buckets"><app-view-block [block]="m.tenants"></app-view-block></div></div>
+
+          <div class="col-lg-5">
+            <h6 class="mb-2"><em class="feather icon-award me-1 text-primary"></em>Empresas con más ventas del mes</h6>
+            @if (m.top.length) {
+            <table class="table table-sm table-hover align-middle small">
+              <thead><tr><th scope="col">Empresa</th><th scope="col" class="text-end">Ventas</th><th scope="col" class="text-end">Docs.</th></tr></thead>
+              <tbody>
+                @for (t of m.top; track t.tenantId) {
+                <tr>
+                  <td>
+                    @if (canOpenTenant) {<a [routerLink]="['/private/sunat/tenants', t.tenantId]">{{ t.name }}</a>} @else {<span>{{ t.name }}</span>}
+                    <div class="text-muted">{{ t.ruc }}</div>
+                  </td>
+                  <td class="text-end erp-num">{{ t.sales }}</td>
+                  <td class="text-end erp-num">{{ t.documents }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+            } @else {
+            <p class="small text-muted">Sin ventas aceptadas en soles este mes.</p>
+            }
+          </div>
+
+          <div class="col-lg-7">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <h6 class="mb-0"><em class="feather icon-send me-1 text-primary"></em>Últimos envíos (30 días)</h6>
+              @if (canSubmissions) {<a class="small" routerLink="/private/sunat/submissions">Ver todos</a>}
+            </div>
+            @if (m.recent.length) {
+            <table class="table table-sm table-hover align-middle small">
+              <thead><tr><th scope="col">Documento</th><th scope="col">Empresa</th><th scope="col">SUNAT</th><th scope="col">Enviado</th>
+                @if (canOpenTenant) {<th scope="col"><span class="visually-hidden">Ver</span></th>}</tr></thead>
+              <tbody>
+                @for (r of m.recent; track r.vista + r.id) {
+                <tr>
+                  <td>{{ r.tipoNombre }}<div class="text-muted">{{ r.numero }}</div></td>
+                  <td>{{ r.razonSocial }}<div class="text-muted">{{ r.ruc }}</div></td>
+                  <td><span class="badge {{ r.badgeColor }}" [title]="r.sunatText ?? ''">{{ r.statusText }}</span></td>
+                  <td>{{ r.sentText }}</td>
+                  @if (canOpenTenant) {
+                  <td class="text-center">
+                    <button type="button" class="btn btn-sm btn-link p-0" (click)="openRecent(r)" aria-label="Ver detalle"><em class="feather icon-eye"></em></button>
+                  </td>
+                  }
+                </tr>
+                }
+              </tbody>
+            </table>
+            } @else {
+            <p class="small text-muted">Sin envíos en los últimos 30 días.</p>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+    }
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="mb-3">Accesos directos</h5>
+        <div class="row g-3">
+          @for (s of shortcuts; track s.url) {
+          <div class="col-sm-6 col-lg-4 col-xl-3">
+            <a class="card h-100 text-decoration-none border shadow-none mb-0 home-card" [routerLink]="s.url">
+              <div class="card-body text-start">
+                <em class="feather {{ s.icon }} f-24 text-primary d-block mb-2"></em>
+                <h6 class="mb-1">{{ s.label }}</h6>
+                <p class="text-muted small mb-0">{{ s.description }}</p>
+              </div>
+            </a>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #cardBody let-c>
+  <div class="card-body d-flex align-items-start gap-3">
+    <span class="home-card__icon text-{{ c.tone }}"><em class="feather {{ c.icon }}"></em></span>
+    <div>
+      <p class="text-muted small mb-1">{{ c.label }}</p>
+      <h3 class="mb-1 text-{{ c.tone }}">{{ c.value }}</h3>
+      <p class="small text-muted mb-0">{{ c.hint }}</p>
+    </div>
+  </div>
+</ng-template>

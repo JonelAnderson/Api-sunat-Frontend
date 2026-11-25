@@ -1,0 +1,39 @@
+::ng-deep.upload-list {
+    overflow: hidden;
+}
+
+.overlay {
+    position: relative;
+
+    .delete-button {
+        background-color: #fafafa;
+        color: red;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        cursor: pointer;
+        z-index: 10;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        font-size: 16px;
+        line-height: 30px;
+        border-radius: 50%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+
+        &:hover {
+            transform: scale(1.1);
+            background-color: #fff;
+        }
+    }
+}
+
+.file-container {
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background-color: #f0f0f0;
+    }
+}

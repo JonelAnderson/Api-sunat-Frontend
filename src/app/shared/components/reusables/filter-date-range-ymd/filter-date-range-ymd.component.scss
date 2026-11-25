@@ -1,0 +1,131 @@
+// Filtro de rango de fechas: mismo alto, borde, radio y foco que app-filter-select (sistema de diseño --erp-*).
+:host {
+  display: inline-block;
+  min-width: 15.5rem;
+  max-width: 100%;
+}
+
+.erp-date-range {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: var(--erp-control-height, 40px);
+  padding: 0 0.25rem 0 0.75rem;
+  border: 1px solid var(--erp-border-strong, #dbe0e5);
+  border-radius: var(--erp-radius, 8px);
+  background: var(--erp-surface, #fff);
+  font-family: 'Kanit', sans-serif;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: var(--erp-primary-border, #cfe5ff);
+  }
+
+  &:focus-within {
+    border-color: var(--erp-primary, #4099ff);
+    box-shadow: 0 0 0 0.2rem rgba(64, 153, 255, 0.18);
+  }
+
+  &--active .erp-date-range__icon {
+    color: var(--erp-primary, #4099ff);
+  }
+}
+
+.erp-date-range__icon {
+  flex-shrink: 0;
+  font-size: 1rem;
+  color: var(--erp-text-muted, #5b6b79);
+}
+
+.erp-date-range__input {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--erp-text, #1d2630);
+
+  input {
+    cursor: pointer;
+  }
+
+  input::placeholder {
+    color: #64748b;
+    opacity: 1;
+  }
+}
+
+.erp-date-range__clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--erp-radius-pill, 999px);
+  background: transparent;
+  color: var(--erp-text-muted, #5b6b79);
+
+  &:hover,
+  &:focus-visible {
+    background: var(--erp-primary-soft, #eaf4ff);
+    color: var(--erp-primary-dark, #265c99);
+    outline: none;
+  }
+}
+
+// Botón del calendario compacto (el de Material mide 48 px y desbordaría los 40 px del control).
+.erp-date-range__toggle {
+  flex-shrink: 0;
+  color: var(--erp-text-muted, #5b6b79);
+
+  ::ng-deep .mat-mdc-icon-button {
+    width: 2rem;
+    height: 2rem;
+    padding: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  ::ng-deep .mat-mdc-button-touch-target {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+// Solo dentro de este componente (antes estos ::ng-deep eran globales y alteraban otros datepickers).
+:host ::ng-deep {
+  .mat-date-range-input {
+    display: flex;
+    width: 100%;
+  }
+
+  .mat-date-range-input-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .mat-date-range-input-wrapper {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .mat-date-range-input-separator {
+    margin: 0 0.35rem;
+    color: var(--erp-text-subtle, #8996a4);
+  }
+}
+
+@media (max-width: 480px) {
+  :host {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .erp-date-range__input {
+    font-size: 0.8rem;
+  }
+}

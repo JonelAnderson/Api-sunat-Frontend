@@ -1,0 +1,20 @@
+<div class="filter-select-wrapper" [style.min-width]="minWidth" [matTooltip]="tooltip || null">
+  <ng-select
+    class="filter-select-glass"
+    dropdownPanelClass="filter-select-panel"
+    appendTo="body"
+    [items]="items"
+    [bindLabel]="bindLabel"
+    [bindValue]="bindValue"
+    [placeholder]="placeholder"
+    [clearable]="clearable"
+    [ngModel]="selectedValue"
+    (ngModelChange)="onValueChange($event)">
+    <ng-template ng-option-tmp let-item="item">
+      <div class="filter-select-option">
+        <span class="filter-select-option-label">{{ item[bindLabel] }}</span>
+        <em class="feather icon-check filter-select-option-check"></em>
+      </div>
+    </ng-template>
+  </ng-select>
+</div>

@@ -1,0 +1,121 @@
+.search-box-wrapper {
+    .search-container {
+        background: var(--erp-surface, #fff);
+        border-radius: var(--erp-radius, 8px);
+        height: var(--erp-control-height, 40px);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        border: 1px solid var(--erp-border-strong, #dbe0e5);
+        box-shadow: none !important;
+        overflow: hidden;
+
+        &:hover {
+            border-color: var(--erp-primary-border, #cfe5ff);
+        }
+
+        &:focus-within {
+            border-color: var(--erp-primary, #4099ff);
+            box-shadow: 0 0 0 0.2rem rgba(64, 153, 255, 0.18) !important;
+        }
+
+        .btn-search-type {
+            border: none;
+            background: var(--erp-surface-muted, #f8fafc);
+            border-right: 1px solid var(--erp-border, #e2e5e8);
+            height: 100%;
+            border-radius: 0;
+            color: var(--erp-text-muted, #5b6b79);
+            font-size: 0.9rem;
+
+            &:hover, &.show {
+                background: var(--erp-primary-softer, #f4f9ff);
+                color: var(--erp-primary-dark, #265c99);
+            }
+
+            &::after {
+                display: none;
+            }
+        }
+
+        .input-area {
+            .search-main-icon {
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+
+            input {
+                font-size: 0.9rem;
+                color: var(--erp-text, #1d2630);
+                background: transparent;
+                &::placeholder {
+                    color: var(--erp-text-subtle, #8996a4);
+                    font-size: 0.875rem;
+                }
+            }
+
+            &:focus-within .search-main-icon {
+                opacity: 1;
+            }
+        }
+
+        .reset-btn {
+            color: var(--erp-text-subtle, #8996a4);
+            transition: color 0.2s;
+            text-decoration: none;
+
+            &:hover {
+                color: var(--erp-danger-text, #993243);
+            }
+        }
+
+        // Detalle de acento: franja naranja cuando el texto es válido para buscar.
+        .submit-action-area {
+            width: 3px;
+            height: 100%;
+            background: var(--erp-accent, #fa5b0f);
+            opacity: 0;
+            transition: opacity 0.2s;
+
+            &.peek-active {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+// El menú de tipo de búsqueda se dibuja en <body> (ngbDropdown container="body"): sus estilos van fuera de .search-box-wrapper.
+.animate-dropdown {
+        animation: fadeIn 0.2s ease-out;
+        min-width: 220px;
+    }
+
+    .dropdown-item-custom {
+        transition: background-color 0.2s ease, color 0.2s ease;
+        border-left: 3px solid transparent;
+        color: var(--erp-text-muted, #5b6b79);
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--erp-surface-muted, #f8fafc);
+            color: var(--erp-text, #1d2630);
+        }
+
+        &.active-item {
+            background-color: var(--erp-primary-soft, #eaf4ff) !important;
+            color: var(--erp-primary-dark, #265c99) !important;
+            font-weight: 600;
+            border-left-color: var(--erp-accent, #fa5b0f);
+
+            .item-label {
+                color: var(--erp-primary-dark, #265c99);
+            }
+        }
+
+        .item-label {
+            font-size: 0.9rem;
+        }
+    }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,9 @@
+.select-pagination {
+
+    // Custom styles if needed to match Bootstrap or Material overrides
+    ng-select {
+        &.ng-invalid.ng-touched .ng-select-container {
+            border-color: #dc3545;
+        }
+    }
+}

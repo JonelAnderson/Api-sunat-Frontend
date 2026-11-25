@@ -1,0 +1,90 @@
+.filter-state-wrapper {
+    .btn-filter-glass {
+        min-height: var(--erp-control-height, 40px);
+        background: var(--erp-surface, #fff);
+        border: 1px solid var(--erp-border-strong, #dbe0e5);
+        color: var(--erp-text, #1d2630);
+        transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+        border-radius: var(--erp-radius, 8px);
+        box-shadow: none;
+
+        &:hover,
+        &:focus,
+        &.show {
+            background: var(--erp-surface, #fff);
+            border-color: var(--erp-primary-border, #cfe5ff);
+            color: var(--erp-primary-dark, #265c99);
+        }
+
+        &:focus-visible {
+            outline: 2px solid rgba(64, 153, 255, 0.7);
+            outline-offset: 2px;
+        }
+
+        &::after {
+            display: none;
+        }
+
+        .icon-circle-state {
+            width: 26px;
+            height: 26px;
+            background: var(--erp-primary-soft, #eaf4ff);
+            color: var(--erp-primary-dark, #265c99);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+        }
+
+        .btn-label {
+            font-weight: 500;
+            font-size: 0.875rem;
+            letter-spacing: 0.2px;
+        }
+    }
+
+    .animate-dropdown {
+        animation: fadeIn 0.2s ease-out;
+        // Se elimina mt-2 para evitar conflictos con el posicionamiento de ng-bootstrap
+        margin-top: 0 !important;
+    }
+
+    .dropdown-item-custom {
+        transition: background-color 0.2s ease, color 0.2s ease;
+        border: 2px solid transparent;
+        color: var(--erp-text-muted, #5b6b79);
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--erp-surface-muted, #f8fafc);
+            color: var(--erp-text, #1d2630);
+        }
+
+        &.active-item {
+            background-color: var(--erp-primary-soft, #eaf4ff) !important;
+            color: var(--erp-primary-dark, #265c99) !important;
+            font-weight: 600;
+            border-left: 3px solid var(--erp-accent, #fa5b0f) !important;
+
+            .check-icon {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .item-label {
+            font-size: 0.9rem;
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

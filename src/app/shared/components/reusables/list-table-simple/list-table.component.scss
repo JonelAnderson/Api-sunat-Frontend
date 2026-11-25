@@ -1,0 +1,110 @@
+/* Global Overrides */
+::ng-deep .mat-sort-header-container {
+    justify-content: center !important;
+}
+
+::ng-deep .mat-menu-panel {
+    min-width: 180px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+:host {
+    display: block;
+}
+
+/* Modern & Premium Table Design */
+.mat-table {
+    font-family: 'Inter', sans-serif;
+    background: white;
+    width: 100%;
+}
+
+/* Header Styling */
+.mat-header-row {
+    background-color: #ffffff !important;
+    border-bottom: 2px solid #e2e8f0;
+    min-height: 42px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    th.mat-header-cell {
+        color: #64748b;
+        font-weight: 700;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        vertical-align: middle;
+        padding: 0 16px;
+
+        &:first-of-type {
+            padding-left: 24px;
+        }
+
+        &:last-of-type {
+            padding-right: 24px;
+        }
+    }
+}
+
+/* Row Styling */
+.mat-row {
+    border-bottom: 1px solid #f1f5f9;
+    transition: background-color 0.15s ease;
+    height: 40px !important;
+    min-height: 40px !important;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #f8fafc !important;
+
+        td {
+            font-weight: 500;
+            color: #1e293b;
+            background-color: #f8fafc !important;
+        }
+    }
+
+    td.mat-cell {
+        color: #475569;
+        font-size: 0.875rem;
+        padding: 0 16px;
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f5f9;
+
+        &:first-of-type {
+            padding-left: 24px;
+        }
+
+        &:last-of-type {
+            padding-right: 24px;
+        }
+    }
+}
+
+.table-responsive {
+    max-height: 55vh;
+    overflow-y: auto;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    position: relative;
+
+    @media (min-width: 992px) {
+        max-height: calc(100vh - 300px);
+    }
+
+    @media (max-width: 767px) {
+        max-height: calc(100vh - 430px);
+    }
+
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #cbd5e1;
+        border-radius: 4px;
+    }
+}

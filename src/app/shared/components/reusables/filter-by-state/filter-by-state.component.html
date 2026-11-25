@@ -1,0 +1,31 @@
+<div class="filter-state-wrapper">
+    <div class="btn-group" ngbDropdown placement="bottom-right" matTooltip="Filtrar por Estado">
+        <button type="button" class="btn btn-filter-glass dropdown-toggle d-flex align-items-center gap-2 px-3 py-2"
+            ngbDropdownToggle>
+            <div class="icon-circle-state" *ngIf="getActiveIcon()">
+                <em class="feather icon-{{getActiveIcon()}}"></em>
+            </div>
+            <span class="btn-label">{{ getActiveLabel() }}</span>
+        </button>
+
+        <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 p-2 rounded-4 animate-dropdown" ngbDropdownMenu>
+            <h6 class="dropdown-header text-muted small fw-bold text-uppercase tracking-wider px-3 py-2">Filtrar por
+                Estado</h6>
+            <div class="dropdown-divider mx-3"></div>
+
+            @for (item of items; track item.id) {
+            <button ngbDropdownItem type="button" (click)="setFilter(item.id, items)"
+                class="dropdown-item-custom d-flex align-items-center justify-content-between gap-3 px-3 py-2 rounded-3 mb-1"
+                [class.active-item]="isActive(item.id)">
+
+                <div class="d-flex align-items-center gap-2">
+                    <em class="feather icon-{{item.icon}} f-16" [ngClass]="item.class?.icon" *ngIf="item.icon"></em>
+                    <span class="item-label">{{ item.label }}</span>
+                </div>
+
+                <em class="feather icon-check text-primary f-14 check-icon" *ngIf="isActive(item.id)"></em>
+            </button>
+            }
+        </div>
+    </div>
+</div>

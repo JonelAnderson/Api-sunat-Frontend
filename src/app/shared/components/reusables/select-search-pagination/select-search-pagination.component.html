@@ -1,0 +1,24 @@
+<div class="form-group select-pagination">
+    @if(label){
+        <label class="form-label">{{label}}</label>
+    }
+    <ng-select [items]="items" [bindLabel]="bindLabel" [bindValue]="bindValue" [multiple]="multiple"
+        [placeholder]="placeholder" [loading]="loading" [virtualScroll]="true" [typeahead]="typeaheadInput$"
+        (scrollToEnd)="onScrollToEnd()" [(ngModel)]="value" (change)="onSelectionChange($event)" (blur)="onTouched()"
+        [disabled]="disabled">
+
+        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+            <div class="d-flex align-items-center">
+                <!-- Optional: Add icon/avatar support if bindLabel is complex -->
+                <span>{{ item[bindLabel] }}</span>
+            </div>
+        </ng-template>
+
+        <ng-template ng-loadingspinner-tmp>
+            <div class="spinner-border spinner-border-sm text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </ng-template>
+
+    </ng-select>
+</div>

@@ -1,0 +1,156 @@
+<div class="help">
+  <!-- ================================================== Cabecera con buscador -->
+  <section class="card help-hero">
+    <div class="help-hero__top">
+      <span class="help-hero__icon" aria-hidden="true"><em class="feather icon-life-buoy"></em></span>
+      <div>
+        <h1 class="help-hero__title">Centro de ayuda</h1>
+        <p class="help-hero__subtitle">Guías rápidas del Panel API SUNAT y respuestas a las dudas más comunes.</p>
+      </div>
+    </div>
+
+    <div class="help-search" role="search">
+      <em class="feather icon-search help-search__icon" aria-hidden="true"></em>
+      <input type="search" class="help-search__input" [value]="query()" (input)="onSearch($any($event.target).value)"
+        placeholder="¿Qué necesita hacer? Ej.: suspender, cambiar plan, certificado…" aria-label="Buscar en la ayuda" />
+      @if (searching()) {
+      <button type="button" class="help-search__clear" (click)="clear()" aria-label="Limpiar la búsqueda">
+        <em class="feather icon-x" aria-hidden="true"></em>
+      </button>
+      }
+    </div>
+
+    <div class="help-chips" aria-label="Búsquedas frecuentes">
+      <span class="help-chips__label">Frecuentes:</span>
+      @for (term of suggestions; track term) {
+      <button type="button" class="help-chip" [class.help-chip--active]="isActive(term)" [attr.aria-pressed]="isActive(term)"
+        (click)="suggest(term)">{{ term }}</button>
+      }
+    </div>
+  </section>
+
+  <!-- ================================================== Primeros pasos -->
+  @if (!searching()) {
+  <section class="help-section" aria-labelledby="help-steps-title">
+    <h2 id="help-steps-title" class="help-section__title"><em class="feather icon-flag" aria-hidden="true"></em>Primeros pasos</h2>
+    <div class="help-steps">
+      @for (step of steps; track step.title; let i = $index) {
+      <div class="help-step">
+        <span class="help-step__num">{{ i + 1 }}</span>
+        <span class="help-step__icon" aria-hidden="true"><em class="feather" [ngClass]="step.icon"></em></span>
+        <h3 class="help-step__title">{{ step.title }}</h3>
+        <p class="help-step__text">{{ step.text }}</p>
+      </div>
+      }
+    </div>
+  </section>
+  }
+
+  @if (hasResults()) {
+  <div class="row g-3">
+    <!-- ================================================== Guías por módulo -->
+    <div class="col-12 col-xxl-8">
+      @if (modules().length) {
+      <section class="help-section" aria-labelledby="help-guides-title">
+        <h2 id="help-guides-title" class="help-section__title">
+          <em class="feather icon-book-open" aria-hidden="true"></em>{{ searching() ? 'Guías encontradas' : 'Guías por módulo' }}
+        </h2>
+        <div class="help-modules">
+          @for (m of modules(); track m.id) {
+          <article class="card help-module">
+            <header class="help-module__head">
+              <span class="help-module__icon" aria-hidden="true"><em class="feather" [ngClass]="m.icon"></em></span>
+              <div>
+                <h3 class="help-module__title">{{ m.title }}</h3>
+                <p class="help-module__summary">{{ m.summary }}</p>
+              </div>
+            </header>
+            <ul class="help-tasks">
+              @for (t of m.tasks; track t.title) {
+              <li class="help-task">
+                @if (canOpen(t.url)) {
+                <a class="help-task__title help-task__title--link" [routerLink]="t.url">
+                  {{ t.title }}<em class="feather icon-arrow-right" aria-hidden="true"></em>
+                </a>
+                } @else {
+                <span class="help-task__title">{{ t.title }}</span>
+                }
+                <span class="help-task__hint">{{ t.hint }}</span>
+              </li>
+              }
+            </ul>
+          </article>
+          }
+        </div>
+      </section>
+      }
+    </div>
+
+    <!-- ================================================== Lateral: atajos y contacto -->
+    <div class="col-12 col-xxl-4">
+      @if (!searching() && shortcuts.length) {
+      <section class="card help-side" aria-labelledby="help-keys-title">
+        <h2 id="help-keys-title" class="help-side__title"><em class="feather icon-command" aria-hidden="true"></em>Atajos</h2>
+        <ul class="help-keys">
+          @for (k of shortcuts; track k.keys) {
+          <li><kbd class="help-kbd">{{ k.keys }}</kbd><span>{{ k.text }}</span></li>
+          }
+        </ul>
+      </section>
+      }
+
+      <section class="card help-side help-side--contact" aria-labelledby="help-contact-title">
+        <h2 id="help-contact-title" class="help-side__title"><em class="feather icon-headphones" aria-hidden="true"></em>¿Necesita más ayuda?</h2>
+        @if (hasContact) {
+        <p class="help-side__text">Escríbanos o llámenos{{ contact.hours ? ' (' + contact.hours + ')' : '' }}.</p>
+        <div class="d-grid gap-2">
+          @if (contact.email) {
+          <a class="btn btn-primary" [href]="'mailto:' + contact.email"><em class="feather icon-mail me-1" aria-hidden="true"></em>{{ contact.email }}</a>
+          }
+          @if (contact.phone) {
+          <a class="btn btn-outline-primary" [href]="'tel:' + contact.phone"><em class="feather icon-phone me-1" aria-hidden="true"></em>{{ contact.phone }}</a>
+          }
+        </div>
+        } @else {
+        <p class="help-side__text mb-0">
+          Comuníquese con un <strong>superadministrador</strong> del panel: puede cambiar su rol, asignarle una contraseña
+          temporal, restablecer su verificación en dos pasos o desbloquear su cuenta.
+        </p>
+        }
+      </section>
+    </div>
+  </div>
+
+  <!-- ================================================== Preguntas frecuentes -->
+  @if (faq().length) {
+  <section class="help-section" aria-labelledby="help-faq-title">
+    <h2 id="help-faq-title" class="help-section__title"><em class="feather icon-message-circle" aria-hidden="true"></em>Preguntas frecuentes</h2>
+    <div class="card help-faq">
+      @for (f of faq(); track f.question; let first = $first) {
+      <details class="help-faq__item" [open]="searching() && first">
+        <summary class="help-faq__question">
+          <span>{{ f.question }}</span>
+          <em class="feather icon-chevron-down help-faq__chevron" aria-hidden="true"></em>
+        </summary>
+        <div class="help-faq__answer">
+          <p>{{ f.answer }}</p>
+          @if (canOpen(f.url)) {
+          <a class="help-faq__link" [routerLink]="f.url">{{ f.urlLabel || 'Ir a la pantalla' }}<em class="feather icon-arrow-right" aria-hidden="true"></em></a>
+          }
+        </div>
+      </details>
+      }
+    </div>
+  </section>
+  }
+  } @else {
+  <div class="card">
+    <div class="erp-empty">
+      <span class="erp-empty__icon"><em class="feather icon-search" aria-hidden="true"></em></span>
+      <p class="erp-empty__title">No encontramos resultados para "{{ query() }}"</p>
+      <p class="erp-empty__text">Pruebe con otra palabra (por ejemplo "empresa", "certificado" o "rechazo") o consulte a un superadministrador.</p>
+      <button type="button" class="btn btn-outline-primary btn-sm mt-2" (click)="clear()">Ver toda la ayuda</button>
+    </div>
+  </div>
+  }
+</div>

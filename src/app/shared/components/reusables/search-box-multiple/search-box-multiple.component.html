@@ -1,0 +1,47 @@
+<div class="search-box-wrapper">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="search-container d-flex align-items-center shadow-sm">
+            <!-- Search Type Selection (Dropdown) -->
+            <!-- container="body": el cuadro tiene overflow hidden (bordes redondeados) y recortaba el menú. -->
+            <div ngbDropdown container="body" class="d-flex h-100" *ngIf="searchOptions.length > 1">
+                <button type="button" class="btn btn-search-type d-flex align-items-center gap-2 px-3" ngbDropdownToggle>
+                    <em class="feather icon-{{labelSelection.icon}} f-16 text-muted"></em>
+                    <span class="small text-nowrap">{{ labelSelection.label }}</span>
+                    <em class="feather icon-chevron-down f-12 text-muted ms-1 opacity-50"></em>
+                </button>
+                <div ngbDropdownMenu class="dropdown-menu shadow-lg border-0 mt-2 p-2 rounded-4 animate-dropdown">
+                    <h6 class="dropdown-header text-muted small fw-bold text-uppercase tracking-wider px-3 py-2">Tipo de Búsqueda</h6>
+                    <div class="dropdown-divider mx-3"></div>
+                    <button ngbDropdownItem *ngFor="let option of searchOptions" (click)="changeSelection(option)"
+                        class="dropdown-item-custom d-flex align-items-center gap-3 px-3 py-2 rounded-3 mb-1"
+                        [class.active-item]="option == labelSelection">
+                        <em class="feather icon-{{option.icon}} f-16 text-muted"></em>
+                        <span class="item-label">{{ option.label }}</span>
+                        <em class="feather icon-check text-primary f-14 ms-auto" *ngIf="option == labelSelection"></em>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Search Input Area -->
+            <div class="input-area d-flex align-items-center flex-grow-1 px-2">
+                <em class="feather icon-search text-primary f-18 search-main-icon"></em>
+                <input type="text" 
+                    class="form-control border-0 shadow-none ps-2"
+                    formControlName="searchData" 
+                    [matTooltip]="labelSelection.validation_desc"
+                    [placeholder]="labelSelection.placeholder">
+                
+                <!-- Reset Button (Visible only when text is present) -->
+                <button type="button" 
+                    class="btn btn-link link-secondary p-1 f-18 reset-btn" 
+                    (click)="reset()"
+                    *ngIf="form.get('searchData')?.value">
+                    <em class="feather icon-x-circle"></em>
+                </button>
+            </div>
+            
+            <!-- Submit Decorator / Border -->
+            <div class="submit-action-area peek-active" *ngIf="form.valid"></div>
+        </div>
+    </form>
+</div>

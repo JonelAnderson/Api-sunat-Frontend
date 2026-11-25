@@ -1,0 +1,39 @@
+      
+<div class="modal-header">
+  <h5 class="modal-title color-modal-title">Visor de PDF</h5>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.close()"></button>
+</div>
+<div class="modal-body"> 
+  <div class="row">
+      <div class="col-md-12">
+        <div class="pdf-preview" *ngIf="fileUrlData">
+          <div id="outerContainer">
+            <div class="pdf-container">
+              <pdf-viewer
+                [src]="fileUrlData"
+                [rotation]="0"
+                [original-size]="original_size_custom"
+                [show-all]="true"
+                [fit-to-page]="false"
+                [zoom]="1"
+                [zoom-scale]="'page-width'"
+                [stick-to-page]="false"
+                [render-text]="true"
+                [render-text-mode]="1"
+                [external-link-target]="'blank'"
+                [autoresize]="true"
+                [show-borders]="true"
+                style="width: 100%; height: 600px"
+              ></pdf-viewer>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+
+
+</div>
+
+<div class="modal-footer">
+  <button mat-button  (click)="activeModal.close()">CERRAR</button>
+</div>

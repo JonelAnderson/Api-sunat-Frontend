@@ -1,0 +1,40 @@
+<!-- generic-loading.component.html -->
+<div *ngIf="isVisible" [class]="containerClass" class="alert-overlay">
+  <div class="loading-content">
+    <!-- Spinner -->
+    <div class="modern-spinner">
+      <!-- Dots Spinner -->
+      <div *ngIf="spinnerType === 'dots'" [class]="spinnerClass">
+        <div 
+          *ngFor="let dot of dotsArray; let i = index" 
+          class="dot" 
+          [ngStyle]="getDotStyle(i)">
+        </div>
+      </div>
+      
+      <!-- Ring Spinner -->
+      <div *ngIf="spinnerType === 'ring'" [class]="spinnerClass"></div>
+      
+      <!-- Pulse Spinner -->
+      <div *ngIf="spinnerType === 'pulse'" [class]="spinnerClass"></div>
+    </div>
+
+    <!-- Loading Message -->
+    <h3 class="loading-message" [class.variant-primary]="variant === 'primary'" 
+        [class.variant-success]="variant === 'success'"
+        [class.variant-warning]="variant === 'warning'"
+        [class.variant-error]="variant === 'error'">
+      {{ message }}
+    </h3>
+
+    <!-- Submessage -->
+    <p *ngIf="showSubmessage" class="loading-submessage">
+      {{ submessage }}
+    </p>
+
+    <!-- Progress Bar -->
+    <div *ngIf="showProgress" class="progress-container">
+      <div [class]="progressBarClass"></div>
+    </div>
+  </div>
+</div>
